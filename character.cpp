@@ -1,6 +1,187 @@
 #include "character.h"
 #include "stdio.h"
 
+class Modifiers
+{
+
+}
+
+void Attribute::SetAgeBonuses(UINT16 age, RaceEnum race)
+{
+    memset(ageBonus, 0x00, sizeof(AttributeStruct));
+    switch(race)
+    {
+        case HUMAN:
+            if (age < 35)
+            else if (age < 53) SetMiddleAge();
+            else if (age <70) setOldAge();
+            else setVenerableAge();
+            break;
+        case DWARF:
+            if (age < 125)
+            else if (age < 188) SetMiddleAge();
+            else if (age < 250) setOldAge();
+            else setVenerableAge();
+            break;
+        case ELF:
+            if (age < 175)
+            else if (age < 263) SetMiddleAge();
+            else if (age < 350) setOldAge();
+            else setVenerableAge();
+            break;
+        case GNOME:
+            if (age < 100)
+            else if (age < 150) SetMiddleAge();
+            else if (age < 200) setOldAge();
+            else setVenerableAge();
+            break;
+        case HALF-ELF:
+            if (age < 62)
+            else if (age < 93) SetMiddleAge();
+            else if (age < 125) setOldAge();
+            else setVenerableAge();
+            break;
+        case HALF-ORC:
+            if (age < 30)
+            else if (age < 45) SetMiddleAge();
+            else if (age < 60) setOldAge();
+            else setVenerableAge();
+            break;
+        case HALFLING:
+            if (age < 50)
+            else if (age < 75) SetMiddleAge();
+            else if (age < 100) setOldAge();
+            else setVenerableAge();
+            break;
+    }
+}
+
+void Attribute::SetMiddleAge()
+{
+    ageBonus.str = -1
+    ageBonus.dex = -1;
+    ageBonus.con = -1;
+    ageBonus.int = 1;
+    ageBonus.wis = 1;
+    ageBonus.cha = 1;
+}
+
+void Attribute::SetOldAge()
+{
+    ageBonus.str = -2
+    ageBonus.dex = -2;
+    ageBonus.con = -2;
+    ageBonus.int = 1;
+    ageBonus.wis = 1;
+    ageBonus.cha = 1;
+}
+
+void Attribute::)
+{
+    ageBonus.str = -3
+    ageBonus.dex = -3;
+    ageBonus.con = -3;
+    ageBonus.int = 1;
+    ageBonus.wis = 1;
+    ageBonus.cha = 1;
+}
+
+void Attribute::SetRaceBonuses(RaceEnum race)
+{
+    memset(raceBonus, 0x00, sizeof(AttributeStruct));
+    switch(race)
+    {
+        case DWARF:
+            raceBonus.con = 2;
+            raceBonus.cha = -2;
+            break;
+        case ELF:
+            raceBonus.dex = 2;
+            raceBonus.con = -2;
+            break;
+        case GNOME:
+            raceBonus.con = 2;
+            raceBonus.str = -2;
+            break;
+        case HALF-ORC:
+            raceBonus.str = 2;
+            raceBonus.int = -2;
+            raceBonus.cha = -2;
+        case HALFLING:
+            raceBonus.dex = 2;
+            raceBonus.str = -2;
+    }
+}
+
+INT8 Attribute::GetStr()
+{
+    return attr.str + attrBonus.str + raceBonus.str + classBonus.str;
+}
+
+INT8 Attribute::GetDex()
+{
+    return attr.dex + attrBonus.dex + raceBonus.dex + classBonus.dex;
+}
+
+INT8 Attribute::GetCon()
+{
+    return attr.con + attrBonus.con + raceBonus.con + classBonus.con;
+}
+
+INT8 Attribute::GetInt()
+{
+    return attr.int + attrBonus.int + raceBonus.int + classBonus.int;
+}
+
+INT8 Attribute::GetWis()
+{
+    return attr.wis + attrBonus.wis; + raceBonus.wis + classBonus.wis
+}
+
+INT8 Attribute::GetCha()
+{
+    return attr.cha + attrBonus.cha + raceBonus.cha + classBonus.cha;
+}
+INT8 Attribute::GetStrMod()
+{
+    return attrMod.str;
+}
+
+INT8 Attribute::GetDexMod()
+{
+    return attrMod.dex;
+}
+
+INT8 Attribute::GetConMod()
+{
+    return attrMod.con;
+}
+
+INT8 Attribute::GetIntMod()
+{
+    return attrMod.int;
+}
+
+INT8 Attribute::GetWisMod()
+{
+    return attrMod.wis;
+}
+
+INT8 Attribute::GetChaMod()
+{
+    return attrMod.cha;
+}
+
+int8 Attribute::CalcMods(int8 sourceAttr)
+{
+	NotifyAttributesModified();	
+
+	return ((sourceAttr) / 2) - 5;	
+}
+
+
+
+
 void Being::RecalcCharacter()
 {
 	CalculateMaxHealth();
@@ -271,32 +452,7 @@ void Being::DecreaseArmor(UINT8 decAmnt)
 }
 
 
-void Being::CalculateAttributeModifier(Attribute* sourceAttr)
-{
-	//attrOffset is the offset from the beginning of the attributeModifier
-	//structure that the current attribute is located. Calculated from
-	//the difference between the passed attribute and the start of the normal
-	//attribute structure
-	UINT8 attrOffset = sourceAttr - &attributes.strength;
-	if(*sourceAttr==0)
-	{
-		*(&attributeModifiers.strength+attrOffset)=-3;
-	}
-	else if(*sourceAttr < 4)
-	{
-		*(&attributeModifiers.strength+attrOffset)= (*sourceAttr) - 4;
-	}
-	else if(*sourceAttr < 8)
-	{
-		*(&attributeModifiers.strength+attrOffset)= 0;
-	}
-	else
-	{
-		*(&attributeModifiers.strength+attrOffset)= ((((*sourceAttr)/2) - 3));
-	}	
-	RecalcCharacter();	
-	
-}
+
 
 Attribute Being::GetStrengthMod()
 {
@@ -327,7 +483,32 @@ Attribute Being::GetMagicMod()
 {
 	return attributeModifiers.magic;
 }
+	void Being::CalculateAttributeModifier(Attribute* sourceAttr)
+{
+	//attrOffset is the offset from the beginning of the attributeModifier
+	//structure that the current attribute is located. Calculated from
+	//the difference between the passed attribute and the start of the normal
+	//attribute structure
+	UINT8 attrOffset = sourceAttr - &attributes.strength;
+	if(*sourceAttr==0)
+	{
+		*(&attributeModifiers.strength+attrOffset)=-3;
+	}
+	else if(*sourceAttr < 4)
+	{
+		*(&attributeModifiers.strength+attrOffset)= (*sourceAttr) - 4;
+	}
+	else if(*sourceAttr < 8)
+	{
+		*(&attributeModifiers.strength+attrOffset)= 0;
+	}
+	else
+	{
+		*(&attributeModifiers.strength+attrOffset)= ((((*sourceAttr)/2) - 3));
+	}	
+	RecalcCharacter();	
 	
+}
 #define MAX_GOLD 999999
 
 
