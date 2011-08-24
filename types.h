@@ -3,13 +3,12 @@
 
 #include <string>
 
-typedef unsigned short 	UINT8;
-typedef unsigned int 	UINT16;
-typedef unsigned long 	UINT32;
-typedef short 			INT8;
-typedef int 			INT16;
-typedef long 			INT32;
-typedef bool			BOOL;
+typedef unsigned short 	uint8;
+typedef unsigned int 	uint16;
+typedef unsigned long 	uint32;
+typedef short 			int8;
+typedef int 			int16;
+typedef long 			int32;
 
 typedef std::string		string;
 

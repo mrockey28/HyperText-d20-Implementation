@@ -113,71 +113,7 @@ void Attribute::SetRaceBonuses(RaceEnum race)
     }
 }
 
-INT8 Attribute::GetStr()
-{
-    return attr.str + attrBonus.str + raceBonus.str + classBonus.str;
-}
 
-INT8 Attribute::GetDex()
-{
-    return attr.dex + attrBonus.dex + raceBonus.dex + classBonus.dex;
-}
-
-INT8 Attribute::GetCon()
-{
-    return attr.con + attrBonus.con + raceBonus.con + classBonus.con;
-}
-
-INT8 Attribute::GetInt()
-{
-    return attr.int + attrBonus.int + raceBonus.int + classBonus.int;
-}
-
-INT8 Attribute::GetWis()
-{
-    return attr.wis + attrBonus.wis; + raceBonus.wis + classBonus.wis
-}
-
-INT8 Attribute::GetCha()
-{
-    return attr.cha + attrBonus.cha + raceBonus.cha + classBonus.cha;
-}
-INT8 Attribute::GetStrMod()
-{
-    return attrMod.str;
-}
-
-INT8 Attribute::GetDexMod()
-{
-    return attrMod.dex;
-}
-
-INT8 Attribute::GetConMod()
-{
-    return attrMod.con;
-}
-
-INT8 Attribute::GetIntMod()
-{
-    return attrMod.int;
-}
-
-INT8 Attribute::GetWisMod()
-{
-    return attrMod.wis;
-}
-
-INT8 Attribute::GetChaMod()
-{
-    return attrMod.cha;
-}
-
-int8 Attribute::CalcMods(int8 sourceAttr)
-{
-	NotifyAttributesModified();	
-
-	return ((sourceAttr) / 2) - 5;	
-}
 
 
 

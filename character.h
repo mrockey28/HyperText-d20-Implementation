@@ -8,40 +8,7 @@
 
 typedef INT8 Attribute;
 
-class Attributes
-{
-    typedef struct AttributeStruct
-    {
-        INT8 str;
-        INT8 dex;
-        INT8 con;
-        INT8 int;
-        INT8 wis;
-        INT8 cha;
-    }AttributeStruct;
-    AttributeStruct attr;
-    AttributeStruct attrBonus;
-    AttributeStruct atrrMod;
-    AttributeStruct raceBonus;
-    AttributeStruct classBonus;
 
-    int8 CalcMods(int8);
-
-public:
-    INT8 GetStr();
-    INT8 GetDex();
-    INT8 GetCon();
-    INT8 GetInt();
-    INT8 GetWis();
-    INT8 GetCha();
-    INT8 GetStrMod();
-    INT8 GetDexMod();
-    INT8 GetConMod();
-    INT8 GetIntMod();
-    INT8 GetWisMod();
-    INT8 GetChaMod();
-
-}
 
 
 class Being
@@ -56,17 +23,7 @@ class Being
   		Attribute intelligence;
   		Attribute magic;
 	}AttributeT;
-	string name;
-	UINT16 maxHealth;
-	UINT16 currentHealth;
-	AttributeT attributes;
-	AttributeT	attributeModifiers;
 
-	UINT8 defense;
-	UINT8 meleeAttack;
-	UINT8 rangedAttack;
-	UINT8 speed;
-	UINT8 armor;
 
  	void CalculateAttributeModifier(Attribute* sourceAttr);
 	void CalculateMaxHealth();
