@@ -38,12 +38,8 @@ public:
 
 	void SetName(string);
 	string GetName();
-	BOOL FullHeal();
-	UINT16 Heal(UINT16 addedHealth);
-	UINT16 Hurt(UINT16 removedHealth);
-	BOOL	Kill();
-	BOOL	Alive();
-	UINT16 GetCurrentHealth();
+
+
 
 	void SetStrength(Attribute setAttr);
 	void SetAgility(Attribute setAttr);
@@ -95,16 +91,7 @@ class Humanoid: public virtual Being
 		ItemT feet;
 	}EquipmentT;
 	EquipmentT equipment;
-	typedef enum RaceEnum
-	{
-		HUMAN,
-		ELF,
-		GNOME,
-        DWARF,
-        HALF-ELF,
-        HALF-ORC,
-        HALFLING
-	}RaceEnum;
+
 	RaceEnum race;
 };
 

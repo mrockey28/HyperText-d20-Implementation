@@ -1,1 +1,1 @@
-gcc -Wall ClassTests.cpp -lstdc++ -o ClassTests
+gcc -Wall ClassTests.cpp Being.cpp Humanoid.cpp -lstdc++ -o ClassTests

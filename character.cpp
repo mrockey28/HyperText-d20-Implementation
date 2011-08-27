@@ -6,112 +6,11 @@ class Modifiers
 
 }
 
-void Attribute::SetAgeBonuses(UINT16 age, RaceEnum race)
-{
-    memset(ageBonus, 0x00, sizeof(AttributeStruct));
-    switch(race)
-    {
-        case HUMAN:
-            if (age < 35)
-            else if (age < 53) SetMiddleAge();
-            else if (age <70) setOldAge();
-            else setVenerableAge();
-            break;
-        case DWARF:
-            if (age < 125)
-            else if (age < 188) SetMiddleAge();
-            else if (age < 250) setOldAge();
-            else setVenerableAge();
-            break;
-        case ELF:
-            if (age < 175)
-            else if (age < 263) SetMiddleAge();
-            else if (age < 350) setOldAge();
-            else setVenerableAge();
-            break;
-        case GNOME:
-            if (age < 100)
-            else if (age < 150) SetMiddleAge();
-            else if (age < 200) setOldAge();
-            else setVenerableAge();
-            break;
-        case HALF-ELF:
-            if (age < 62)
-            else if (age < 93) SetMiddleAge();
-            else if (age < 125) setOldAge();
-            else setVenerableAge();
-            break;
-        case HALF-ORC:
-            if (age < 30)
-            else if (age < 45) SetMiddleAge();
-            else if (age < 60) setOldAge();
-            else setVenerableAge();
-            break;
-        case HALFLING:
-            if (age < 50)
-            else if (age < 75) SetMiddleAge();
-            else if (age < 100) setOldAge();
-            else setVenerableAge();
-            break;
-    }
-}
 
-void Attribute::SetMiddleAge()
-{
-    ageBonus.str = -1
-    ageBonus.dex = -1;
-    ageBonus.con = -1;
-    ageBonus.int = 1;
-    ageBonus.wis = 1;
-    ageBonus.cha = 1;
-}
 
-void Attribute::SetOldAge()
-{
-    ageBonus.str = -2
-    ageBonus.dex = -2;
-    ageBonus.con = -2;
-    ageBonus.int = 1;
-    ageBonus.wis = 1;
-    ageBonus.cha = 1;
-}
 
-void Attribute::)
-{
-    ageBonus.str = -3
-    ageBonus.dex = -3;
-    ageBonus.con = -3;
-    ageBonus.int = 1;
-    ageBonus.wis = 1;
-    ageBonus.cha = 1;
-}
 
-void Attribute::SetRaceBonuses(RaceEnum race)
-{
-    memset(raceBonus, 0x00, sizeof(AttributeStruct));
-    switch(race)
-    {
-        case DWARF:
-            raceBonus.con = 2;
-            raceBonus.cha = -2;
-            break;
-        case ELF:
-            raceBonus.dex = 2;
-            raceBonus.con = -2;
-            break;
-        case GNOME:
-            raceBonus.con = 2;
-            raceBonus.str = -2;
-            break;
-        case HALF-ORC:
-            raceBonus.str = 2;
-            raceBonus.int = -2;
-            raceBonus.cha = -2;
-        case HALFLING:
-            raceBonus.dex = 2;
-            raceBonus.str = -2;
-    }
-}
+
 
 
 
@@ -138,53 +37,6 @@ string Being::GetName()
 	return name;
 }
 
-BOOL	Being::FullHeal()
-{
-	currentHealth = maxHealth;
-	return TRUE;
-}
-
-UINT16 Being::Heal(UINT16 addedHealth)
-{
-	if ((currentHealth += addedHealth) > maxHealth)
-	{
-		currentHealth = maxHealth;
-	}
-	return currentHealth;
-}
-
-UINT16 Being::Hurt(UINT16 removedHealth)
-{
-	if (currentHealth < removedHealth)
-	{
-		currentHealth = 0;
-	}
-	else
-	{
-		currentHealth -= removedHealth;
-	}
-	return currentHealth;
-}
-
-BOOL	Being::Kill()
-{
-	currentHealth = 0;
-	return TRUE;
-}
-
-BOOL	Being::Alive()
-{
-	if (currentHealth > 0)
-	{
-		return TRUE;
-	}
-	return FALSE;
-}
-
-UINT16 Being::GetCurrentHealth()
-{
-	return currentHealth;
-}
 
 void Being::SetStrength(Attribute setAttr)
 {
