@@ -1,0 +1,7 @@
+#Sun Sep 16 04:15:17 EDT 2012
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.base.1599337458/PATH/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.base.1599337458/PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.base.1599337458/PATH/value=C\:\\cygwin\\bin;C\:\\Program Files (x86)\\AMD APP\\bin\\x86_64;C\:\\Program Files (x86)\\AMD APP\\bin\\x86;C\:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C\:\\Program Files\\Common Files\\Microsoft Shared\\Windows Live;C\:\\Windows\\system32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C\:\\Program Files\\Java\\jdk1.6.0_24\\bin;C\:\\Python27\\;C\:\\Program Files (x86)\\QuickTime\\QTSystem\\;C\:\\Program Files\\Common Files\\Microsoft Shared\\Windows Live
+environment/project/cdt.managedbuild.toolchain.gnu.base.1599337458/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.base.1599337458/appendContributed=true

@@ -1,8 +1,8 @@
 #include <iostream>
-#include "character.h"
+#include "Beings\character.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "enemy.h"
+#include "Beings\enemy.h"
 #include "battle.h"
 #include "rpgUtils.h"
 
@@ -39,7 +39,7 @@ char Battle::GetMainMenuSelection()
 	return menuChoice;
 }
 
-BOOL Battle::IsValidMainMenuOption(char i)
+bool Battle::IsValidMainMenuOption(char i)
 {
 	if (i == 'f' || i == 'e' || i == 'b' || i == 'd' || 
 		i == 'm' || i == 'r' || i == 'g' || i == 'u')
@@ -49,7 +49,7 @@ BOOL Battle::IsValidMainMenuOption(char i)
 	return FALSE;
 }
 
-BOOL Battle::MainMenuSwitcher(char menuChoice)
+bool Battle::MainMenuSwitcher(char menuChoice)
 {
 
 	switch(menuChoice)
@@ -75,15 +75,15 @@ BOOL Battle::MainMenuSwitcher(char menuChoice)
 			return FALSE;
 	}
 }
-	BOOL Battle::RunForward(){return FALSE;}
-	BOOL Battle::GoBackwards(){return FALSE;}
-	BOOL Battle::BackpackMenu(){return FALSE;}
-	BOOL Battle::DrawWeapon(){return FALSE;}
-	BOOL Battle::UseMeleeWeapon(){return FALSE;}
-	BOOL Battle::UseRangedWeapon(){return FALSE;}
-	BOOL Battle::MagicMenu(){return FALSE;}
+	bool Battle::RunForward(){return FALSE;}
+	bool Battle::GoBackwards(){return FALSE;}
+	bool Battle::BackpackMenu(){return FALSE;}
+	bool Battle::DrawWeapon(){return FALSE;}
+	bool Battle::UseMeleeWeapon(){return FALSE;}
+	bool Battle::UseRangedWeapon(){return FALSE;}
+	bool Battle::MagicMenu(){return FALSE;}
 
-BOOL Battle::RunAway()
+bool Battle::RunAway()
 {
 	
 	if (enemy.GetBossFlag())
@@ -98,7 +98,7 @@ BOOL Battle::RunAway()
 	}
 	SpendMoves(playerMaxMoves);
 	
-	if ((Xd6(9) + (UINT16)enemy.GetSpeed()) >= (Xd6(10)+(UINT16)player.GetAgilityMod()))
+	if ((Xd6(9) + (uint16)enemy.GetSpeed()) >= (Xd6(10)+(uint16)player.GetAgilityMod()))
 	{
 		printf("You failed  to escape.\n");
 		return TRUE;
@@ -123,7 +123,7 @@ void Battle::MainLoop()
 	setExtraInfo(&player, &enemy);
 	printf("You have been waylaid by %s!\n", (enemy.GetName()).c_str());
 
-	while (enemy.Alive() && player.Alive())
+	while (enemy.isAlive() && player.isAlive())
 	{
 		system("clear");
 		MainBattleMenu();
@@ -141,7 +141,7 @@ void Battle::MainLoop()
 	}
 	
 	//Battle over!
-	if (enemy.Alive())
+	if (enemy.IsAlive())
 	{
 		//player->Death();
 	}

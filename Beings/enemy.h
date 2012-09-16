@@ -1,26 +1,26 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "types.h"
+#include "..\types.h"
 #include "character.h"
 
 	
 //Inherit from Being
 class Enemy: public virtual Being
 {
-	UINT16 xpBonusGranted;
-	BOOL bossFlag;
+	uint16 xpBonusGranted;
+	bool bossFlag;
 
 public:
 	Enemy()
 	{
 		bossFlag = 0;
 	}
-	BOOL GetBossFlag()
+	bool GetBossFlag()
 	{
 		return bossFlag;
 	}
-	UINT16 GetXpBonus();
+	uint16 GetXpBonus();
 };
 
 //Inherit from Enemy & Humanoid

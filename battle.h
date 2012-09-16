@@ -2,8 +2,8 @@
 #define BATTLE_H
 
 #include "types.h"
-#include "enemy.h"
-#include "character.h"
+#include "Beings\enemy.h"
+#include "Beings\character.h"
 
 #define NUM_OF_MAIN_MENU_OPTIONS 8
 #define MAX_DISTANCE 250
@@ -11,17 +11,17 @@
 class Battle
 {
 	
-	UINT8 distanceToEnemy;
-	UINT16 totalRounds;	
-	UINT8 playerMoves;
-	UINT8 playerMaxMoves;
-	BOOL battleFled;
+	uint8 distanceToEnemy;
+	uint16 totalRounds;
+	uint8 playerMoves;
+	uint8 playerMaxMoves;
+	bool battleFled;
 
 	EnemyHumanoid enemy;
 	PlayerCharacter player;
 
 public:
-	Battle(UINT8 startingDistance, PlayerCharacter passedPlayer, EnemyHumanoid passedEnemy)
+	Battle(uint8 startingDistance, PlayerCharacter passedPlayer, EnemyHumanoid passedEnemy)
 	{
 		distanceToEnemy = startingDistance;
 		player = passedPlayer;
@@ -31,21 +31,21 @@ public:
 		playerMaxMoves = player.GetAgilityMod()+2;
 		playerMoves = playerMaxMoves;
 	}
-	void GetFurther(UINT8 distance)
+	void GetFurther(uint8 distance)
 	{
 		if (distance+distanceToEnemy > MAX_DISTANCE)
 			distanceToEnemy = MAX_DISTANCE;
 		else
 			distanceToEnemy += distance;
 	}
-	void GetCloser(UINT8 distance)
+	void GetCloser(uint8 distance)
 	{
 		if (distanceToEnemy - distance < 0)
 			distanceToEnemy = 0;
 		else
 			distanceToEnemy -= distance;
 	}
-	void SpendMoves(UINT8 numberOfMoves)
+	void SpendMoves(uint8 numberOfMoves)
 	{
 		if (numberOfMoves >= playerMoves)
 			playerMoves = 0;
@@ -55,16 +55,16 @@ public:
 	void MainLoop();
 	void MainBattleMenu();
 	char GetMainMenuSelection();
-	BOOL IsValidMainMenuOption(char);
-	BOOL MainMenuSwitcher(char);
-	BOOL RunForward();
-	BOOL GoBackwards();
-	BOOL BackpackMenu();
-	BOOL DrawWeapon();
-	BOOL UseMeleeWeapon();
-	BOOL UseRangedWeapon();
-	BOOL MagicMenu();
-	BOOL RunAway();
+	bool IsValidMainMenuOption(char);
+	bool MainMenuSwitcher(char);
+	bool RunForward();
+	bool GoBackwards();
+	bool BackpackMenu();
+	bool DrawWeapon();
+	bool UseMeleeWeapon();
+	bool UseRangedWeapon();
+	bool MagicMenu();
+	bool RunAway();
 	
 
 };

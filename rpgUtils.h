@@ -1,8 +1,8 @@
 #ifndef RPGUTILS_H
 #define RPGUTILS_H
 
-extern UINT16 Xd20(UINT8 numOfDice);
-extern UINT16 Xd6(UINT8 numOfDice);
+extern uint16 Xd20(uint8 numOfDice);
+extern uint16 Xd6(uint8 numOfDice);
 
 
 #endif

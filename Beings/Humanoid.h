@@ -1,6 +1,8 @@
 #ifndef HUMANOID_H
 #define HUMANOID_H
 
+#include "..\equipment.h"
+
 typedef enum RaceEnum
 {
     HUMAN,
@@ -35,9 +37,19 @@ class Humanoid: public Being
     RaceEnum race;
     ClassEnum clas;
     uint16 age;
-    uint16 xp;
     uint8 level;
 
+	typedef struct
+	{
+		ItemT head;
+		ItemT torso;
+		ItemT finger1;
+		ItemT finger2;
+		ItemT lefthand;
+		ItemT righthand;
+		ItemT feet;
+	}EquipmentT;
+	EquipmentT equipment;
 
     void SetAgeBonuses();
     void SetRaceBonuses();

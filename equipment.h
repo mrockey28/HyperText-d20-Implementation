@@ -5,8 +5,8 @@
 
 typedef struct
 {
-	UINT16 stdPrice;
-	UINT8 weight;
+	uint16 stdPrice;
+	uint8 weight;
 }ItemT;
 
 
@@ -15,9 +15,9 @@ typedef struct
 ///////////
 typedef struct
 {
-	UINT8 armor;
-	UINT8 durability;
-	UINT8 sizeClass;
+	uint8 armor;
+	uint8 durability;
+	uint8 sizeClass;
 	ItemT itemProperties;
 }ArmorT;
 

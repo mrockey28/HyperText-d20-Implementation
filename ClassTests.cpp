@@ -1,6 +1,6 @@
 #include "types.h"
-#include "Being.h"
-#include "Humanoid.h"
+#include "Beings\Being.h"
+#include "Beings\Humanoid.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include <iostream>

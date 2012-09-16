@@ -1,6 +1,8 @@
 #ifndef BEING_H
 #define BEING_H
 
+typedef int8 Attribute;
+
 typedef enum SizeEnum
 {
     SMALL = 0x00,
@@ -81,7 +83,6 @@ typedef struct AbilityStruct
 
 class Feat;
 
-
 class Being
 {
     string name;
@@ -103,6 +104,26 @@ class Being
     uint8 baseAttackBonus[4];
     SkillStruct skills;
     Feat* featHead;
+
+	typedef struct
+	{
+  		Attribute strength;
+  		Attribute agility;
+  		Attribute charisma;
+ 		Attribute constitution;
+  		Attribute intelligence;
+  		Attribute magic;
+	}AttributeT;
+
+
+ 	void CalculateAttributeModifier(Attribute* sourceAttr);
+	void CalculateMaxHealth();
+ 	void SetArmor(uint8 setAmnt);
+ 	void SetSpeed(uint8 setAmnt);
+ 	void SetRangedAttack(uint8 setAmnt);
+ 	void SetMeleeAttack(uint8 setAmnt);
+ 	void SetDefense(uint8 setAmnt);
+
 protected:
 
     AbilityStruct abilities;
@@ -134,6 +155,47 @@ public:
     uint8 GetRefBonus();
     uint8 GetFortBonus();
     uint8 GetWillBonus();
+
+ 	uint8 GetDefense();
+ 	void IncreaseDefense(uint8 incAmnt);
+ 	void DecreaseDefense(uint8 decAmnt);
+ 	uint8 GetMeleeAttack();
+ 	void IncreaseMeleeAttack(uint8 incAmnt);
+ 	void DecreaseMeleeAttack(uint8 decAmnt);
+ 	uint8 GetRangedAttack();
+ 	void IncreaseRangedAttack(uint8 incAmnt);
+ 	void DecreaseRangedAttack(uint8 decAmnt);
+ 	uint8 GetSpeed();
+ 	void IncreaseSpeed(uint8 incAmnt);
+ 	void DecreaseSpeed(uint8 decAmnt);
+ 	uint8 GetArmor();
+ 	void IncreaseArmor(uint8 incAmnt);
+ 	void DecreaseArmor(uint8 decAmnt);
+
+	void RecalcCharacter();
+
+	void SetName(string);
+	string GetName();
+
+	void SetStrength(Attribute setAttr);
+	void SetAgility(Attribute setAttr);
+	void SetCharisma(Attribute setAttr);
+	void SetConstitution(Attribute setAttr);
+	void SetIntelligence(Attribute setAttr);
+	void SetMagic(Attribute setAttr);
+
+ 	Attribute GetStrength();
+ 	Attribute GetAgility();
+ 	Attribute GetCharisma();
+ 	Attribute GetConstitution();
+ 	Attribute GetIntelligence();
+ 	Attribute GetMagic();
+	Attribute GetStrengthMod();
+ 	Attribute GetAgilityMod();
+ 	Attribute GetCharismaMod();
+ 	Attribute GetConstitutionMod();
+ 	Attribute GetIntelligenceMod();
+ 	Attribute GetMagicMod();
 
 #define FORT 0
 #define REF 1
