@@ -1,8 +1,8 @@
 #include <iostream>
-#include "Beings\character.h"
+#include "Beings/character.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "Beings\enemy.h"
+#include "Beings/enemy.h"
 #include "battle.h"
 #include "rpgUtils.h"
 
@@ -98,7 +98,7 @@ bool Battle::RunAway()
 	}
 	SpendMoves(playerMaxMoves);
 	
-	if ((Xd6(9) + (uint16)enemy.GetSpeed()) >= (Xd6(10)+(uint16)player.GetAgilityMod()))
+	if ((Xd6(9) + (uint16)enemy.GetSpeed()) >= (Xd6(10)+(uint16)player.GetAbilityMod(DEX)))
 	{
 		printf("You failed  to escape.\n");
 		return TRUE;
@@ -108,10 +108,8 @@ bool Battle::RunAway()
 	return TRUE;
 }
 
-void setExtraInfo(PlayerCharacter* player, EnemyHumanoid* enemy)
+void setExtraInfo(PlayerCharacter* player, Enemy* enemy)
 {
-	player->SetStrength(20);
-	enemy->SetStrength(20);
 	player->Heal(20);
 	enemy->Heal(20);
 	enemy->SetName("Bandit");
@@ -123,7 +121,7 @@ void Battle::MainLoop()
 	setExtraInfo(&player, &enemy);
 	printf("You have been waylaid by %s!\n", (enemy.GetName()).c_str());
 
-	while (enemy.isAlive() && player.isAlive())
+	while (enemy.IsAlive() && player.IsAlive())
 	{
 		system("clear");
 		MainBattleMenu();
@@ -151,13 +149,15 @@ void Battle::MainLoop()
 }
 
 
+/*
 int main()
 {
 	PlayerCharacter player;
-	EnemyHumanoid enemy;
+	Enemy enemy;
 	Battle battle(32, player, enemy);
 	battle.MainLoop();
 }
+*/
 
 
 /*

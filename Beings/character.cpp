@@ -4,12 +4,12 @@
 class Modifiers
 {
 
-}
+};
 
 #define MAX_GOLD 999999
 
 
-BOOL PlayerCharacter::Buy(UINT32 cost)
+bool PlayerCharacter::Buy(uint32 cost)
 {
 	if (cost > gold)
 	{
@@ -22,7 +22,7 @@ BOOL PlayerCharacter::Buy(UINT32 cost)
 	}
 }
 
-void PlayerCharacter::RemoveGold(UINT32 amnt)
+void PlayerCharacter::RemoveGold(uint32 amnt)
 {
 	if (Buy(amnt) == FALSE)
 	{
@@ -30,7 +30,7 @@ void PlayerCharacter::RemoveGold(UINT32 amnt)
 	}
 }
 
-void PlayerCharacter::AddGold(UINT32 amnt)
+void PlayerCharacter::AddGold(uint32 amnt)
 {
 	if ((amnt+gold) > MAX_GOLD)
 	{
@@ -42,12 +42,12 @@ void PlayerCharacter::AddGold(UINT32 amnt)
 	}
 }
 
-void PlayerCharacter::Sell(UINT32 cost)
+void PlayerCharacter::Sell(uint32 cost)
 {
 	AddGold(cost);
 }
 
-UINT32 PlayerCharacter::GetGold()
+uint32 PlayerCharacter::GetGold()
 {
 	return gold;
 }

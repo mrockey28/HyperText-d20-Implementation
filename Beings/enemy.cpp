@@ -1,6 +1,6 @@
 #include "enemy.h"
 
-UINT16 Enemy::GetXpBonus()
+uint16 Enemy::GetXpBonus()
 {
 	return xpBonusGranted;
 }

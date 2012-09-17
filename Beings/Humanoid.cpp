@@ -1,34 +1,90 @@
-#include "types.h"
+#include "../types.h"
 #include "stdio.h"
 #include "string.h"
-#include "Being.h"
 #include "Humanoid.h"
+
+Humanoid::Humanoid(){}
+Humanoid::Humanoid(string nameP, RaceEnum passedRace, uint16 passedAge, ClassEnum passedClass)
+	: level(1), Being(nameP, GetRaceSize(passedRace), GetRaceSpeed(passedRace), GetBaseSaveBonus(REF, passedClass),
+			GetBaseSaveBonus(WILL, passedClass), GetBaseSaveBonus(FORT, passedClass))
+{
+	level = 1;
+	race = passedRace;
+	age = passedAge;
+	clas = passedClass;
+	SetAgeBonuses();
+	SetRaceBonuses();
+	CalculateBaseAttackBonus();
+}
+
+SizeEnum Humanoid::GetRaceSize()
+{
+	return GetRaceSize(race);
+}
+
+SizeEnum Humanoid::GetRaceSize(RaceEnum raceP)
+{
+	switch(raceP)
+	{
+		case HUMAN:
+		case ELF:
+		case DWARF:
+		case HALF_ELF:
+		case HALF_ORC:
+			return MEDIUM;
+		case GNOME:
+		case HALFLING:
+			return SMALL;
+	}
+	return MEDIUM;
+}
+
+uint8 Humanoid::GetRaceSpeed()
+{
+	return GetRaceSpeed(race);
+}
+
+uint8 Humanoid::GetRaceSpeed(RaceEnum raceP)
+{
+	switch(raceP)
+	{
+		case HUMAN:
+		case ELF:
+		case HALF_ELF:
+		case HALF_ORC:
+			return 30;
+		case GNOME:
+		case DWARF:
+		case HALFLING:
+			return 20;
+	}
+	return 30;
+}
 
 void Humanoid::SetRaceBonuses()
 {
-    memset(abilities.raceBonus, 0x00, TOTAL_ABILITIES);
     switch(race)
     {
         case DWARF:
-            abilities.raceBonus[CON] = 2;
-            abilities.raceBonus[CHA] = -2;
+            abilities.raceBonus.SetAbility(CON, 2);
+            abilities.raceBonus.SetAbility(CHA, -2);
             break;
         case ELF:
-            abilities.raceBonus[DEX] = 2;
-            abilities.raceBonus[CON] = -2;
+            abilities.raceBonus.SetAbility(DEX, 2);
+            abilities.raceBonus.SetAbility(CON, -2);
             break;
         case GNOME:
-            abilities.raceBonus[STR] = 2;
-            abilities.raceBonus[CON] = -2;
+            abilities.raceBonus.SetAbility(STR, 2);
+            abilities.raceBonus.SetAbility(CON, -2);
             break;
         case HALF_ORC:
-            abilities.raceBonus[STR] = 2;
-            abilities.raceBonus[INT] = -2;
-            abilities.raceBonus[CHA] = -2;
+            abilities.raceBonus.SetAbility(STR, 2);
+            abilities.raceBonus.SetAbility(INT, -2);
+            abilities.raceBonus.SetAbility(CHA, -2);
             break;
         case HALFLING:
-            abilities.raceBonus[DEX] = 2;
-            abilities.raceBonus[STR] = -2;
+            abilities.raceBonus.SetAbility(DEX, 2);
+            abilities.raceBonus.SetAbility(STR, -2);
             break;
         case HUMAN:
         case HALF_ELF:
@@ -39,7 +95,6 @@ void Humanoid::SetRaceBonuses()
 
 void Humanoid::SetAgeBonuses()
 {
-    memset(abilities.ageBonus, 0x00, TOTAL_ABILITIES);
     switch(race)
     {
         case HUMAN:
@@ -90,33 +145,32 @@ void Humanoid::SetAgeBonuses()
 
 void Humanoid::SetMiddleAge()
 {
-    abilities.ageBonus[STR] = -1;
-    abilities.ageBonus[DEX] = -1;
-    abilities.ageBonus[CON] = -1;
-    abilities.ageBonus[INT] = 1;
-    abilities.ageBonus[WIS] = 1;
-    abilities.ageBonus[CHA] = 1;
-
+    abilities.ageBonus.SetAbility(STR, -1);
+    abilities.ageBonus.SetAbility(DEX, -1);
+    abilities.ageBonus.SetAbility(CON, -1);
+    abilities.ageBonus.SetAbility(INT, 1);
+    abilities.ageBonus.SetAbility(WIS, 1);
+    abilities.ageBonus.SetAbility(CHA, 1);
 }
 
 void Humanoid::SetOldAge()
 {
-    abilities.ageBonus[STR] = -2;
-    abilities.ageBonus[DEX] = -2;
-    abilities.ageBonus[CON] = -2;
-    abilities.ageBonus[INT] = 1;
-    abilities.ageBonus[WIS] = 1;
-    abilities.ageBonus[CHA] = 1;
+    abilities.ageBonus.SetAbility(STR, -2);
+    abilities.ageBonus.SetAbility(DEX, -2);
+    abilities.ageBonus.SetAbility(CON, -2);
+    abilities.ageBonus.SetAbility(INT, 1);
+    abilities.ageBonus.SetAbility(WIS, 1);
+    abilities.ageBonus.SetAbility(CHA, 1);
 }
 
 void Humanoid::SetVenerableAge()
 {
-    abilities.ageBonus[STR] = -3;
-    abilities.ageBonus[DEX] = -3;
-    abilities.ageBonus[CON] = -3;
-    abilities.ageBonus[INT] = 1;
-    abilities.ageBonus[WIS] = 1;
-    abilities.ageBonus[CHA] = 1;
+    abilities.ageBonus.SetAbility(STR, -3);
+    abilities.ageBonus.SetAbility(DEX, -3);
+    abilities.ageBonus.SetAbility(CON, -3);
+    abilities.ageBonus.SetAbility(INT, 1);
+    abilities.ageBonus.SetAbility(WIS, 1);
+    abilities.ageBonus.SetAbility(CHA, 1);
 }
 
 void Humanoid::SetHitDie()
@@ -185,48 +239,49 @@ void Humanoid::CalculateBaseAttackBonus()
     }
 }
 
-void Humanoid::CalculateBaseSaveBonus()
+int8 Humanoid::GetBaseSaveBonus(SaveThrowEnum saveType, ClassEnum clasP)
 {
-    switch (clas)
+    switch (clasP)
     {
         case BARBARIAN:
         case FIGHTER:
         case PALADIN:
-            SetBaseSaveBonus(FORT, level/2 + 2);
-            SetBaseSaveBonus(REF, level/3);
-            SetBaseSaveBonus(WILL, level/3);
+        	if (saveType == FORT) return level/2 + 2;
+        	if (saveType == REF) return level/3;
+        	if (saveType == WILL) return level/3;
             break;
         case BARD:
-            SetBaseSaveBonus(FORT, level/3);
-            SetBaseSaveBonus(REF, level/2 + 2);
-            SetBaseSaveBonus(WILL, level/2 + 2);
+        	if (saveType == FORT) return level/3;
+        	if (saveType == REF) return level/2 + 2;
+        	if (saveType == WILL) return level/2 + 2;
             break;
         case CLERIC:
         case DRUID:
-            SetBaseSaveBonus(FORT, level/2 + 2);
-            SetBaseSaveBonus(REF, level/3);
-            SetBaseSaveBonus(WILL, level/2 + 2);
+        	if (saveType == FORT) return level/2 + 2;
+        	if (saveType == REF) return level/3;
+        	if (saveType == WILL) return level/2 + 2;
             break;
         case MONK:
-            SetBaseSaveBonus(FORT, level/2 + 2);
-            SetBaseSaveBonus(REF, level/2 + 2);
-            SetBaseSaveBonus(WILL, level/2 + 2);
+        	if (saveType == FORT) return level/2 + 2;
+        	if (saveType == REF) return level/2 + 2;
+        	if (saveType == WILL) return level/2 + 2;
             break;
         case RANGER:
-            SetBaseSaveBonus(FORT, level/2 + 2);
-            SetBaseSaveBonus(REF, level/2 + 2);
-            SetBaseSaveBonus(WILL, level/3);
+        	if (saveType == FORT) return level/2 + 2;
+        	if (saveType == REF) return level/2 + 2;
+        	if (saveType == WILL) return level/3;
             break;
         case ROGUE:
-            SetBaseSaveBonus(FORT, level/3);
-            SetBaseSaveBonus(REF, level/2 + 2);
-            SetBaseSaveBonus(WILL, level/3);
+        	if (saveType == FORT) return level/3;
+        	if (saveType == REF) return level/2 + 2;
+        	if (saveType == WILL) return level/3;
             break;
         case SORCERER:
         case WIZARD:
-            SetBaseSaveBonus(FORT, level/3);
-            SetBaseSaveBonus(REF, level/3);
-            SetBaseSaveBonus(WILL, level/2 + 2);
+        	if (saveType == FORT) return level/3;
+        	if (saveType == REF) return level/3;
+        	if (saveType == WILL) return level/2 + 2;
             break;
     }
+    return 0;
 }

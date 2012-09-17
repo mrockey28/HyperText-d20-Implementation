@@ -1,7 +1,8 @@
 #ifndef HUMANOID_H
 #define HUMANOID_H
 
-#include "..\equipment.h"
+#include "../equipment.h"
+#include "Being.h"
 
 typedef enum RaceEnum
 {
@@ -51,28 +52,23 @@ class Humanoid: public Being
 	}EquipmentT;
 	EquipmentT equipment;
 
+	SizeEnum GetRaceSize();
+	SizeEnum GetRaceSize(RaceEnum raceP);
+	uint8 GetRaceSpeed();
+	uint8 GetRaceSpeed(RaceEnum raceP);
+
     void SetAgeBonuses();
     void SetRaceBonuses();
     void SetHitDie();
     void CalculateBaseAttackBonus();
-    void CalculateBaseSaveBonus();
+    int8 GetBaseSaveBonus(SaveThrowEnum saveType, ClassEnum clasP);
     void SetMiddleAge();
     void SetOldAge();
     void SetVenerableAge();
 
 public:
-    Humanoid(){}
-    Humanoid(RaceEnum passedRace, uint16 passedAge, ClassEnum passedClass)
-    {
-        level = 1;
-        race = passedRace;
-        age = passedAge;
-        clas = passedClass;
-        SetAgeBonuses();
-        SetRaceBonuses();
-        CalculateBaseAttackBonus();
-        CalculateBaseSaveBonus();
-    }
+    Humanoid();
+    Humanoid(string name, RaceEnum passedRace, uint16 passedAge, ClassEnum passedClass);
 };
 
 

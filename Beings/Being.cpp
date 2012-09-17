@@ -1,6 +1,69 @@
-#include "types.h"
+#include "../types.h"
 #include "Being.h"
 
+
+Being::Being()
+{
+	skills.reqToBeTrained = 0x118810A0;
+	CalculateMaxHealth();
+
+}
+
+Being::Being(string nameP, SizeEnum sizeP, uint8 speedP, int8 refSaveP, int8 willSaveP, int8 fortSaveP)
+{
+	name = nameP;
+	size = sizeP;
+	speed = speedP;
+	baseSaveBonus[REF] = refSaveP;
+	baseSaveBonus[WILL] = willSaveP;
+	baseSaveBonus[FORT] = fortSaveP;
+}
+
+int8 Being::GetArmorClass()
+{
+	return GetArmorClass(0, true);
+}
+
+int8 Being::GetArmorClass(int8 armorPenalty)
+{
+	return GetArmorClass(armorPenalty, true);
+}
+
+int8 Being::GetArmorClass(int8 armorPenalty, bool canUseDexBonus)
+{
+	return 10 + (canUseDexBonus * (GetAbilityMod(DEX) - armorPenalty)) + GetSizeModifier();
+}
+
+int8 Being::GetSizeModifier()
+{
+	switch(size)
+	{
+		case FINE:
+			return 8;
+		case DIMINUTIVE:
+			return 4;
+		case TINY:
+			return 2;
+		case SMALL:
+			return 1;
+		case MEDIUM:
+			return 0;
+		case LARGE:
+			return -1;
+		case HUGE:
+			return -2;
+		case GARGANTUAN:
+			return -4;
+		case COLOSSAL:
+			return -8;
+	}
+	return 0;
+}
+
+int8 Being::GetInitiativeBonus()
+{
+	return GetAbilityMod(DEX);
+}
 
 uint8 Being::GetSkillMod(SkillEnum skill)
 {
@@ -81,17 +144,34 @@ uint8 Being::GetSkillAbilityMod(SkillEnum skill)
 }
 
 
-
 int8 Being::GetAbility(AbilityEnum ability)
 {
-    return abilities.base[ability] + abilities.raceBonus[ability]+ abilities.classBonus[ability] + abilities.ageBonus[ability] + abilities.miscBonus[ability];
+    return abilities.base.GetAbility(ability) + abilities.raceBonus.GetAbility(ability)
+    		+ abilities.classBonus.GetAbility(ability) + abilities.ageBonus.GetAbility(ability) +
+    		abilities.miscBonus.GetAbility(ability);
 }
 
 int8 Being::GetAbilityMod(AbilityEnum ability)
 {
-	return (int8)((GetAbility(ability)) / 2) - 5;
-}
+	int8 abilityValue = GetAbility(ability);
 
+	if(abilityValue == 0)
+	{
+		return -3;
+	}
+	else if(abilityValue < 4)
+	{
+		return abilityValue - 4;
+	}
+	else if(abilityValue < 8)
+	{
+		return 0;
+	}
+	else
+	{
+		return (((abilityValue)/2) - 3);
+	}
+}
 
 bool Being::FullHeal()
 {
@@ -153,24 +233,6 @@ uint8 Being::GetBaseAttackBonus(uint8 bonusNum)
     return baseAttackBonus[bonusNum];
 }
 
-void Being::SetBaseSaveBonus(uint8 bonusNum, int8 bonusAmount)
-{
-    if (bonusAmount < 0)
-    {
-        baseSaveBonus[bonusNum] = 0;
-    }
-    else
-    {
-        baseSaveBonus[bonusNum] = bonusAmount;
-    }
-}
-
-uint8 Being::GetBaseSaveBonus(uint8 bonusNum)
-{
-    return baseSaveBonus[bonusNum];
-}
-
-
 uint8 Being::GetRefBonus()
 {
     return baseSaveBonus[REF];
@@ -197,7 +259,7 @@ void Being::RecalcCharacter()
 
 void Being::CalculateMaxHealth()
 {
-	maxHealth = attributes.strength*3;
+	maxHealth = Being::GetAbility(STR)*3;
 }
 
 void Being::SetName(string passedName)
@@ -210,116 +272,22 @@ string Being::GetName()
 	return name;
 }
 
-
-void Being::SetStrength(Attribute setAttr)
-{
-	attributes.strength = setAttr;
-	CalculateAttributeModifier(&attributes.strength);
-}
-
-Attribute Being::GetStrength()
-{
-	return attributes.strength;
-}
-
-void Being::SetAgility(Attribute setAttr)
-{
-	attributes.agility = setAttr;
-	CalculateAttributeModifier(&attributes.agility);
-}
-
-Attribute Being::GetAgility()
-{
-	return attributes.agility;
-}
-
-void Being::SetCharisma(Attribute setAttr)
-{
-	attributes.charisma = setAttr;
-	CalculateAttributeModifier(&attributes.charisma);
-}
-
-Attribute Being::GetCharisma()
-{
-	return attributes.charisma;
-}
-
-void Being::SetConstitution(Attribute setAttr)
-{
-	attributes.constitution = setAttr;
-	CalculateAttributeModifier(&attributes.constitution);
-}
-
-Attribute Being::GetConstitution()
-{
-	return attributes.constitution;
-}
-
-void Being::SetIntelligence(Attribute setAttr)
-{
-	attributes.intelligence = setAttr;
-	CalculateAttributeModifier(&attributes.intelligence);
-}
-
-Attribute Being::GetIntelligence()
-{
-	return attributes.intelligence;
-}
-
-void Being::SetMagic(Attribute setAttr)
-{
-	attributes.magic = setAttr;
-	CalculateAttributeModifier(&attributes.magic);
-}
-
-Attribute Being::GetMagic()
-{
-	return attributes.magic;
-}
-
-void Being::SetDefense(UINT8 setAmnt)
-{
-	defense = setAmnt;
-}
-
-UINT8 Being::GetDefense()
-{
-	return defense;
-}
-
-void Being::IncreaseDefense(UINT8 incAmnt)
-{
-	defense += incAmnt;
-}
-
-void Being::DecreaseDefense(UINT8 decAmnt)
-{
-	if (defense < decAmnt)
-	{
-		defense = 0;
-	}
-	else
-	{
-		defense -= decAmnt;
-	}
-}
-
-void Being::SetMeleeAttack(UINT8 setAmnt)
+void Being::SetMeleeAttack(uint8 setAmnt)
 {
 	meleeAttack = setAmnt;
 }
 
-UINT8 Being::GetMeleeAttack()
+uint8 Being::GetMeleeAttack()
 {
 	return meleeAttack;
 }
 
-void Being::IncreaseMeleeAttack(UINT8 incAmnt)
+void Being::IncreaseMeleeAttack(uint8 incAmnt)
 {
 	meleeAttack += incAmnt;
 }
 
-void Being::DecreaseMeleeAttack(UINT8 decAmnt)
+void Being::DecreaseMeleeAttack(uint8 decAmnt)
 {
 	if (meleeAttack < decAmnt)
 	{
@@ -331,22 +299,22 @@ void Being::DecreaseMeleeAttack(UINT8 decAmnt)
 	}
 }
 
-void Being::SetRangedAttack(UINT8 setAmnt)
+void Being::SetRangedAttack(uint8 setAmnt)
 {
 	rangedAttack = setAmnt;
 }
 
-UINT8 Being::GetRangedAttack()
+uint8 Being::GetRangedAttack()
 {
 	return rangedAttack;
 }
 
-void Being::IncreaseRangedAttack(UINT8 incAmnt)
+void Being::IncreaseRangedAttack(uint8 incAmnt)
 {
 	rangedAttack += incAmnt;
 }
 
-void Being::DecreaseRangedAttack(UINT8 decAmnt)
+void Being::DecreaseRangedAttack(uint8 decAmnt)
 {
 	if (rangedAttack < decAmnt)
 	{
@@ -358,115 +326,7 @@ void Being::DecreaseRangedAttack(UINT8 decAmnt)
 	}
 }
 
-void Being::SetSpeed(UINT8 setAmnt)
-{
-	speed = setAmnt;
-}
-
-UINT8 Being::GetSpeed()
+uint8 Being::GetSpeed()
 {
 	return speed;
-}
-
-void Being::IncreaseSpeed(UINT8 incAmnt)
-{
-	speed += incAmnt;
-}
-
-void Being::DecreaseSpeed(UINT8 decAmnt)
-{
-	if (speed < decAmnt)
-	{
-		speed = 0;
-	}
-	else
-	{
-		speed -= decAmnt;
-	}
-}
-
-void Being::SetArmor(UINT8 setAmnt)
-{
-	armor = setAmnt;
-}
-
-UINT8 Being::GetArmor()
-{
-	return armor;
-}
-
-void Being::IncreaseArmor(UINT8 incAmnt)
-{
-	armor += incAmnt;
-}
-
-void Being::DecreaseArmor(UINT8 decAmnt)
-{
-	if (armor < decAmnt)
-	{
-		armor = 0;
-	}
-	else
-	{
-		armor -= decAmnt;
-	}
-}
-
-
-
-
-Attribute Being::GetStrengthMod()
-{
-	return attributeModifiers.strength;
-}
-
-Attribute Being::GetAgilityMod()
-{
-	return attributeModifiers.agility;
-}
-
-Attribute Being::GetConstitutionMod()
-{
-	return attributeModifiers.constitution;
-}
-
-Attribute Being::GetCharismaMod()
-{
-	return attributeModifiers.charisma;
-}
-
-Attribute Being::GetIntelligenceMod()
-{
-	return attributeModifiers.intelligence;
-}
-
-Attribute Being::GetMagicMod()
-{
-	return attributeModifiers.magic;
-}
-	void Being::CalculateAttributeModifier(Attribute* sourceAttr)
-{
-	//attrOffset is the offset from the beginning of the attributeModifier
-	//structure that the current attribute is located. Calculated from
-	//the difference between the passed attribute and the start of the normal
-	//attribute structure
-	UINT8 attrOffset = sourceAttr - &attributes.strength;
-	if(*sourceAttr==0)
-	{
-		*(&attributeModifiers.strength+attrOffset)=-3;
-	}
-	else if(*sourceAttr < 4)
-	{
-		*(&attributeModifiers.strength+attrOffset)= (*sourceAttr) - 4;
-	}
-	else if(*sourceAttr < 8)
-	{
-		*(&attributeModifiers.strength+attrOffset)= 0;
-	}
-	else
-	{
-		*(&attributeModifiers.strength+attrOffset)= ((((*sourceAttr)/2) - 3));
-	}
-	RecalcCharacter();
-
 }

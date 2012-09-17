@@ -1,7 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "..\types.h"
+#include "../types.h"
 #include "character.h"
 
 	
@@ -21,12 +21,6 @@ public:
 		return bossFlag;
 	}
 	uint16 GetXpBonus();
-};
-
-//Inherit from Enemy & Humanoid
-class EnemyHumanoid: public Humanoid, public Enemy
-{
-	
 };
 
 

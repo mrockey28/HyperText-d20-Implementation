@@ -2,8 +2,8 @@
 #define BATTLE_H
 
 #include "types.h"
-#include "Beings\enemy.h"
-#include "Beings\character.h"
+#include "Beings/enemy.h"
+#include "Beings/character.h"
 
 #define NUM_OF_MAIN_MENU_OPTIONS 8
 #define MAX_DISTANCE 250
@@ -17,18 +17,18 @@ class Battle
 	uint8 playerMaxMoves;
 	bool battleFled;
 
-	EnemyHumanoid enemy;
+	Enemy enemy;
 	PlayerCharacter player;
 
 public:
-	Battle(uint8 startingDistance, PlayerCharacter passedPlayer, EnemyHumanoid passedEnemy)
+	Battle(uint8 startingDistance, PlayerCharacter passedPlayer, Enemy passedEnemy)
 	{
 		distanceToEnemy = startingDistance;
 		player = passedPlayer;
 		enemy = passedEnemy;
 		totalRounds = 0;
 		battleFled = FALSE;
-		playerMaxMoves = player.GetAgilityMod()+2;
+		playerMaxMoves = player.GetAbility(DEX)+2;
 		playerMoves = playerMaxMoves;
 	}
 	void GetFurther(uint8 distance)

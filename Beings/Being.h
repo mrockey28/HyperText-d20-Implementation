@@ -1,27 +1,27 @@
 #ifndef BEING_H
 #define BEING_H
 
-typedef int8 Attribute;
+#include "Abilities.h"
+
+typedef enum SaveThrowEnum
+{
+	REF,
+	WILL,
+	FORT
+} SaveThrowEnum;
 
 typedef enum SizeEnum
 {
-    SMALL = 0x00,
-    MEDIUM = 0x01,
-    LARGE = 0x02,
-    INVALID = 0x03
+	FINE,
+	DIMINUTIVE,
+	TINY,
+    SMALL,
+    MEDIUM,
+    LARGE,
+    HUGE,
+    GARGANTUAN,
+    COLOSSAL
 } SizeEnum;
-
-
-typedef enum AbilityEnum
-{
-    STR,
-    DEX,
-    CON,
-    INT,
-    WIS,
-    CHA,
-    TOTAL_ABILITIES
-}AbilityEnum;
 
 typedef enum SkillEnum
 {
@@ -73,11 +73,11 @@ typedef struct SkillStruct
 
 typedef struct AbilityStruct
 {    
-    int8 base[TOTAL_ABILITIES];
-    int8 raceBonus[TOTAL_ABILITIES];
-    int8 miscBonus[TOTAL_ABILITIES];
-    int8 classBonus[TOTAL_ABILITIES];
-    int8 ageBonus[TOTAL_ABILITIES];
+	Abilities base;
+    Abilities raceBonus;
+    Abilities miscBonus;
+    Abilities classBonus;
+    Abilities ageBonus;
 }AbilityStruct;
 
 
@@ -86,18 +86,11 @@ class Feat;
 class Being
 {
     string name;
+    SizeEnum size;
+    uint8 speed;
 
     uint16 maxHealth;
     uint16 currentHealth;
-
-    SizeEnum size;
-    uint8 speed;
-    uint8 initiative;
-    uint8 acBase;
-    uint8 acTouch;
-    uint8 acFlatfoot;
-
-
 
     uint8 baseSaveBonus[3];
 
@@ -105,18 +98,11 @@ class Being
     SkillStruct skills;
     Feat* featHead;
 
-	typedef struct
-	{
-  		Attribute strength;
-  		Attribute agility;
-  		Attribute charisma;
- 		Attribute constitution;
-  		Attribute intelligence;
-  		Attribute magic;
-	}AttributeT;
 
+	uint8 meleeAttack;
+	uint8 rangedAttack;
 
- 	void CalculateAttributeModifier(Attribute* sourceAttr);
+ 	void RecalculateAttributeModifiers();
 	void CalculateMaxHealth();
  	void SetArmor(uint8 setAmnt);
  	void SetSpeed(uint8 setAmnt);
@@ -126,20 +112,28 @@ class Being
 
 protected:
 
-    AbilityStruct abilities;
+ 	AbilityStruct abilities;
     uint8 hitDie;
     uint8 GetBaseAttackBonus(uint8 bonusNum);
     void SetBaseAttackBonus(uint8 bonusNum, int8 bonusAmount);
     uint8 GetBaseSaveBonus(uint8 saveType);
-    void SetBaseSaveBonus(uint8 saveType, int8 bonusAmount);
 
 public:
-    Being()
-    {
-        skills.reqToBeTrained = 0x118810A0;
-    }
-    int8 GetAbilityMod(AbilityEnum ability);
+    Being();
+    Being(string nameP, SizeEnum sizeP, uint8 speedP, int8 refSaveP, int8 willSaveP, int8 fortSaveP);
+
+    int8 GetArmorClass();
+    int8 GetArmorClass(int8 armorPenalty);
+    int8 GetArmorClass(int8 armorPenalty, bool canUseDexBonus);
+
+    int8 GetSizeModifier();
+    int8 GetInitiativeBonus();
+
+    uint8 GetSpeed();
+
     int8 GetAbility(AbilityEnum ability);
+    int8 GetAbilityMod(AbilityEnum ability);
+
     uint8 GetSkillMod(SkillEnum skill);
     void ChangeSkillMiscMod(SkillEnum skill, int8 delta);
     uint8 GetSkillAbilityMod(SkillEnum skill);
@@ -156,52 +150,17 @@ public:
     uint8 GetFortBonus();
     uint8 GetWillBonus();
 
- 	uint8 GetDefense();
- 	void IncreaseDefense(uint8 incAmnt);
- 	void DecreaseDefense(uint8 decAmnt);
  	uint8 GetMeleeAttack();
  	void IncreaseMeleeAttack(uint8 incAmnt);
  	void DecreaseMeleeAttack(uint8 decAmnt);
  	uint8 GetRangedAttack();
  	void IncreaseRangedAttack(uint8 incAmnt);
  	void DecreaseRangedAttack(uint8 decAmnt);
- 	uint8 GetSpeed();
- 	void IncreaseSpeed(uint8 incAmnt);
- 	void DecreaseSpeed(uint8 decAmnt);
- 	uint8 GetArmor();
- 	void IncreaseArmor(uint8 incAmnt);
- 	void DecreaseArmor(uint8 decAmnt);
 
 	void RecalcCharacter();
 
 	void SetName(string);
 	string GetName();
-
-	void SetStrength(Attribute setAttr);
-	void SetAgility(Attribute setAttr);
-	void SetCharisma(Attribute setAttr);
-	void SetConstitution(Attribute setAttr);
-	void SetIntelligence(Attribute setAttr);
-	void SetMagic(Attribute setAttr);
-
- 	Attribute GetStrength();
- 	Attribute GetAgility();
- 	Attribute GetCharisma();
- 	Attribute GetConstitution();
- 	Attribute GetIntelligence();
- 	Attribute GetMagic();
-	Attribute GetStrengthMod();
- 	Attribute GetAgilityMod();
- 	Attribute GetCharismaMod();
- 	Attribute GetConstitutionMod();
- 	Attribute GetIntelligenceMod();
- 	Attribute GetMagicMod();
-
-#define FORT 0
-#define REF 1
-#define WILL 2
-
-
 };
 
 
@@ -227,12 +186,6 @@ public:
         return TRUE;
     }
 };
-
-
-
-
-
-
 
 
 #endif //BEING_H
