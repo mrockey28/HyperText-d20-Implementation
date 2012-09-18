@@ -2,21 +2,22 @@
 #include "Being.h"
 
 
-Being::Being()
+Being::Being() : size(Size::MEDIUM)
 {
 	skills.reqToBeTrained = 0x118810A0;
 	CalculateMaxHealth();
 
 }
 
-Being::Being(string nameP, SizeEnum sizeP, uint8 speedP, int8 refSaveP, int8 willSaveP, int8 fortSaveP)
+Being::Being(string name, Size size, uint8 speed, int8 refSave, int8 willSave, int8 fortSave)
+	:	name(name),
+	 	size(size),
+	 	speed(speed),
+	 	baseRefSave(refSave),
+	 	baseWillSave(willSave),
+	 	baseFortSave(fortSave)
 {
-	name = nameP;
-	size = sizeP;
-	speed = speedP;
-	baseSaveBonus[REF] = refSaveP;
-	baseSaveBonus[WILL] = willSaveP;
-	baseSaveBonus[FORT] = fortSaveP;
+	CalculateMaxHealth();
 }
 
 int8 Being::GetArmorClass()
@@ -38,23 +39,23 @@ int8 Being::GetSizeModifier()
 {
 	switch(size)
 	{
-		case FINE:
+		case Size::FINE:
 			return 8;
-		case DIMINUTIVE:
+		case Size::DIMINUTIVE:
 			return 4;
-		case TINY:
+		case Size::TINY:
 			return 2;
-		case SMALL:
+		case Size::SMALL:
 			return 1;
-		case MEDIUM:
+		case Size::MEDIUM:
 			return 0;
-		case LARGE:
+		case Size::LARGE:
 			return -1;
-		case HUGE:
+		case Size::HUGE:
 			return -2;
-		case GARGANTUAN:
+		case Size::GARGANTUAN:
 			return -4;
-		case COLOSSAL:
+		case Size::COLOSSAL:
 			return -8;
 	}
 	return 0;
@@ -235,15 +236,15 @@ uint8 Being::GetBaseAttackBonus(uint8 bonusNum)
 
 uint8 Being::GetRefBonus()
 {
-    return baseSaveBonus[REF];
+    return baseRefSave;
 }
 uint8 Being::GetFortBonus()
 {
-    return baseSaveBonus[FORT];
+    return baseFortSave;
 }
 uint8 Being::GetWillBonus()
 {
-    return baseSaveBonus[WILL];
+    return baseWillSave;
 }
 
 

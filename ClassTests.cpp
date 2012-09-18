@@ -8,9 +8,7 @@
 int main()
 {
 	string playerEnterString;
-	Humanoid player("myname", GNOME, 34, WIZARD);
-
+	Humanoid player("myname", Race::GNOME, Clas::WIZARD, 34, 1);
 	printf("Will: %d, Ref: %d, Str: %d\n", player.GetWillBonus(), player.GetRefBonus(), player.GetAbilityMod(STR));
 	printf("speed: %d, sizeMod: %d", player.GetSpeed(), player.GetSizeModifier());
-	
 }

@@ -3,25 +3,17 @@
 
 #include "Abilities.h"
 
-typedef enum SaveThrowEnum
-{
-	REF,
-	WILL,
-	FORT
-} SaveThrowEnum;
-
-typedef enum SizeEnum
-{
-	FINE,
-	DIMINUTIVE,
-	TINY,
-    SMALL,
-    MEDIUM,
-    LARGE,
-    HUGE,
-    GARGANTUAN,
-    COLOSSAL
-} SizeEnum;
+DEFINE_SIMPLE_ENUM(Size,
+		((FINE, 1))
+		((DIMINUTIVE, 2))
+		((TINY, 3))
+		((SMALL, 4))
+		((MEDIUM, 5))
+		((LARGE, 6))
+		((HUGE, 7))
+		((GARGANTUAN, 8))
+		((COLOSSAL, 9))
+		)
 
 typedef enum SkillEnum
 {
@@ -86,13 +78,15 @@ class Feat;
 class Being
 {
     string name;
-    SizeEnum size;
+    Size size;
     uint8 speed;
 
     uint16 maxHealth;
     uint16 currentHealth;
 
-    uint8 baseSaveBonus[3];
+    uint8 baseRefSave;
+    uint8 baseWillSave;
+    uint8 baseFortSave;
 
     uint8 baseAttackBonus[4];
     SkillStruct skills;
@@ -120,7 +114,7 @@ protected:
 
 public:
     Being();
-    Being(string nameP, SizeEnum sizeP, uint8 speedP, int8 refSaveP, int8 willSaveP, int8 fortSaveP);
+    Being(string name, Size size, uint8 speed, int8 refSave, int8 willSave, int8 fortSave);
 
     int8 GetArmorClass();
     int8 GetArmorClass(int8 armorPenalty);
